@@ -598,7 +598,7 @@
       const alici = TESİS.alicilar[seciliAlici];
       if (GAS_URL !== 'https://script.google.com/macros/s/AKfycbzJkSZCvfIoZ9GE-fJNDEGeuWL4mT64Ho4FsSpt-jNZW1YGcWGbwSVAluLz3izbCm-HiA/exec') {
         fetch(GAS_URL, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          method: 'POST', headers: { 'Content-Type': 'text/plain' },
           body: JSON.stringify({ action: 'setRecipient', tesis: TESİS.id, telefon: alici.telefon, isim: alici.isim })
         }).catch(() => {});
       }
@@ -692,7 +692,7 @@
       sonuc.style.display = 'block'; sonuc.style.background = 'rgba(251,191,36,0.12)'; sonuc.style.color = '#fbbf24'; sonuc.textContent = '⏳ Test ediliyor...';
       if (GAS_URL === '__GAS_URL_HENUZ_AYARLANMADI__') { sonuc.style.background = 'rgba(239,68,68,0.12)'; sonuc.style.color = '#ef4444'; sonuc.textContent = '❌ GAS URL tanımlı değil'; return; }
       try {
-        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'smsWebhook', test: true, tesis: TESİS.id }) });
+        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'ping' }) });
         const data = await res.json();
         sonuc.style.background = 'rgba(34,197,94,0.12)'; sonuc.style.color = '#22c55e'; sonuc.textContent = '✅ Başarılı: ' + (data.message || 'OK');
       } catch(e) { sonuc.style.background = 'rgba(239,68,68,0.12)'; sonuc.style.color = '#ef4444'; sonuc.textContent = '❌ Hata: ' + e.message; }
@@ -706,7 +706,7 @@
       if (!user || !pass) { hata.textContent = 'Kullanıcı adı ve şifre gerekli'; return; }
       if (GAS_URL === '__GAS_URL_HENUZ_AYARLANMADI__') { hata.textContent = 'GAS URL tanımlı değil'; return; }
       try {
-        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'adminLogin', user, pass }) });
+        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'adminLogin', user, pass }) });
         const data = await res.json();
         if (data.ok) { adminGirisli = true; adminPanelGoster(); }
         else hata.textContent = data.error || 'Giriş başarısız';
@@ -762,7 +762,7 @@
         toast('Yerel olarak güncellendi (GAS URL yok)', 'warn'); return;
       }
       try {
-        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'updateCredentials', tesis: TESİS.id, kullanici, sifre }) });
+        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'updateCredentials', tesis: TESİS.id, kullanici, sifre }) });
         const data = await res.json();
         if (data.ok) { TESİS.kullanici = kullanici; TESİS.sifre = sifre; toast('Giriş bilgileri kaydedildi', 'ok'); }
         else toast('Hata: ' + (data.error || 'Kaydedilemedi'), 'err');
@@ -774,7 +774,7 @@
         toast('Yerel olarak güncellendi (GAS URL yok)', 'warn'); aliciListesiOlustur(); return;
       }
       try {
-        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'updateRecipients', tesis: TESİS.id, alicilar: TESİS.alicilar }) });
+        const res = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'updateRecipients', tesis: TESİS.id, alicilar: TESİS.alicilar }) });
         const data = await res.json();
         if (data.ok) { toast('Alıcı listesi kaydedildi', 'ok'); aliciListesiOlustur(); }
         else toast('Hata: ' + (data.error || 'Kaydedilemedi'), 'err');
