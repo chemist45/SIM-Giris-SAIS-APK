@@ -3,7 +3,7 @@ name: APK Build
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # Elle de tetiklenebilir
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,6 +19,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Gradle kur ve Wrapper oluştur
+      run: |
+        wget -q https://services.gradle.org/distributions/gradle-8.7-bin.zip -O gradle.zip
+        unzip -q gradle.zip
+        ./gradle-8.7/bin/gradle wrapper --gradle-version 8.7
+        chmod +x gradlew
+
     - name: Gradle önbelleği
       uses: actions/cache@v4
       with:
@@ -27,11 +34,8 @@ jobs:
           ~/.gradle/wrapper
         key: gradle-${{ hashFiles('**/*.gradle*') }}
 
-    - name: gradlew çalıştırma izni ver
-      run: chmod +x gradlew
-
-    - name: APK derle (Debug — imzasız)
-      run: ./gradlew assembleDebug
+    - name: APK derle
+      run: ./gradlew assembleDebug --stacktrace
 
     - name: APK dosyasını yükle
       uses: actions/upload-artifact@v4
