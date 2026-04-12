@@ -1,4 +1,4 @@
-package com.izsu.simgiris;
+package com.izsu.simgiris.sais;
 
 import android.content.Context;
 import android.content.SharedPreferences;

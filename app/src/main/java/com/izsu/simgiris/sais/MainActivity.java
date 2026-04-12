@@ -1,4 +1,4 @@
-package com.izsu.simgiris;
+package com.izsu.simgiris.sais;
 
 import android.Manifest;
 import android.content.Intent;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webView);
         webViewAyarla();
-        webView.loadUrl("file:///android_asset/index.html");
+        webView.loadUrl("file:///android_asset/sais-app.html");
     }
 
     private void webViewAyarla() {

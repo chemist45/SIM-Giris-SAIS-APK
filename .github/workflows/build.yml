@@ -1,4 +1,4 @@
-name: APK Build
+name: SAİS Sorumlusu APK Build
 
 on:
   push:
@@ -61,11 +61,11 @@ jobs:
           simgiris
         ${ANDROID_HOME}/build-tools/33.0.1/zipalign -v 4 \
           app/build/outputs/apk/release/app-release-unsigned.apk \
-          SIMGiris.apk
+          SAISorumlusu.apk
 
     - name: İmzalı APK'yı yükle
       uses: actions/upload-artifact@v4
       with:
-        name: SIMGiris-Imzali
-        path: SIMGiris.apk
+        name: SAISorumlusu-Imzali
+        path: SAISorumlusu.apk
         retention-days: 30
