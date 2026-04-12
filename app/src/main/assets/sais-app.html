@@ -358,12 +358,19 @@ async function baglantiTesti() {
   box.style.borderColor = '';
   box.textContent = '⏳ Test ediliyor...';
   try {
-    const res = await fetch(GAS_URL + '?action=ping');
-    const d = await res.json();
+    let d;
+    if (isApk()) {
+      // APK içi: Java'dan HTTP isteği — CORS ve redirect sorunu yok
+      const json = window.AndroidNative.pingGas(GAS_URL);
+      d = JSON.parse(json);
+    } else {
+      const res = await fetch(GAS_URL + '?action=ping');
+      d = await res.json();
+    }
     if (d.ok) {
       box.style.color = '#22c55e';
       box.style.borderColor = '#22c55e33';
-      box.textContent = '✅ ' + d.message;
+      box.textContent = '✅ GAS bağlantısı başarılı';
     } else {
       box.style.color = '#ef4444';
       box.textContent = '❌ GAS hata: ' + (d.error || 'bilinmeyen');
