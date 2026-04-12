@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -53,14 +51,9 @@ public class AndroidBridge {
             conn.setInstanceFollowRedirects(true);
 
             int code = conn.getResponseCode();
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) sb.append(line);
-            br.close();
             conn.disconnect();
 
-            if (code == 200) return sb.toString(); // {"ok":true,"message":"..."}
+            if (code == 200) return "{\"ok\":true,\"message\":\"GAS ba\\u011flant\\u0131s\\u0131 ba\\u015far\\u0131l\\u0131\"}";
             return "{\"ok\":false,\"error\":\"HTTP " + code + "\"}";
         } catch (Exception e) {
             return "{\"ok\":false,\"error\":\"" + e.getMessage() + "\"}";
