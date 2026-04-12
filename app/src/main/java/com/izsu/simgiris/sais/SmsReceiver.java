@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -83,8 +86,16 @@ public class SmsReceiver extends BroadcastReceiver {
                 Log.d(TAG, "GAS yanıtı: " + yanit + " | Tesis: " + aktivTesis);
                 conn.disconnect();
 
+                String bildirim = yanit == 200
+                    ? "✅ SMS iletildi → " + aktivTesis
+                    : "⚠️ GAS hatası: HTTP " + yanit;
+                new Handler(Looper.getMainLooper()).post(() ->
+                    Toast.makeText(context, bildirim, Toast.LENGTH_LONG).show());
+
             } catch (Exception e) {
                 Log.e(TAG, "GAS iletme hatası: " + e.getMessage());
+                new Handler(Looper.getMainLooper()).post(() ->
+                    Toast.makeText(context, "❌ İletim hatası: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }).start();
     }
