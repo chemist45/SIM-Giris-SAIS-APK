@@ -362,11 +362,7 @@ async function baglantiTesti() {
   box.style.borderColor = '';
   box.textContent = '⏳ Test ediliyor...';
   try {
-    const res = await fetch(GAS_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'ping' })
-    });
+    const res = await fetch(GAS_URL + '?action=ping');
     const d = await res.json();
     if (d.ok) {
       box.style.color = '#22c55e';
