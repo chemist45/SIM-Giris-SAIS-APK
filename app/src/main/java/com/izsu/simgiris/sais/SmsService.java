@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -23,7 +24,11 @@ public class SmsService extends Service {
     public void onCreate() {
         super.onCreate();
         bildirimKanaliOlustur();
-        startForeground(BILDIRIM_ID, bildirimOlustur());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(BILDIRIM_ID, bildirimOlustur(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+        } else {
+            startForeground(BILDIRIM_ID, bildirimOlustur());
+        }
 
         // Telefon uyku moduna geçse bile servis çalışmaya devam eder
         PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
