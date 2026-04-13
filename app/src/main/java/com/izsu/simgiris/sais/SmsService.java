@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 import androidx.core.app.NotificationCompat;
 
 /**
@@ -16,12 +17,26 @@ import androidx.core.app.NotificationCompat;
 public class SmsService extends Service {
     private static final String KANAL_ID = "SimGirisSmsKanal";
     private static final int BILDIRIM_ID = 1001;
+    private PowerManager.WakeLock wakeLock;
 
     @Override
     public void onCreate() {
         super.onCreate();
         bildirimKanaliOlustur();
         startForeground(BILDIRIM_ID, bildirimOlustur());
+
+        // Telefon uyku moduna geçse bile servis çalışmaya devam eder
+        PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+        if (pm != null) {
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimGiris:SmsWakeLock");
+            wakeLock.acquire();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (wakeLock != null && wakeLock.isHeld()) wakeLock.release();
     }
 
     @Override
