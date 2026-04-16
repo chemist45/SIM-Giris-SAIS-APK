@@ -41,7 +41,7 @@ jobs:
       run: echo "code=${{ github.run_number }}" >> $GITHUB_OUTPUT
 
     - name: Release APK Derle
-      run: ./gradlew assembleRelease --stacktrace
+      run: ./gradlew assembleRelease --stacktrace -PbuildVersionCode=${{ github.run_number }}
 
     - name: APK İmzala (sabit keystore)
       run: |
