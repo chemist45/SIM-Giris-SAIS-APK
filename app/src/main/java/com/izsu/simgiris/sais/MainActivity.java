@@ -11,6 +11,9 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,17 @@ public class MainActivity extends AppCompatActivity {
         smsSivisiniBaslat();
 
         webView = findViewById(R.id.webView);
+
+        // Android 15/16 (targetSdk 35) zorunlu edge-to-edge: sistem çubukları +
+        // klavye inset'lerini WebView'a padding olarak uygula — içerik status
+        // bar altında kalmasın. Android 14 ve altında insets 0 gelir, etkisizdir.
+        ViewCompat.setOnApplyWindowInsetsListener(webView, (v, insets) -> {
+            Insets bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
+
         webViewAyarla();
         webView.loadUrl("file:///android_asset/sais-app.html");
     }
@@ -38,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
         s.setAllowFileAccess(true);
         s.setAllowContentAccess(true);
         s.setAllowFileAccessFromFileURLs(true);
-        s.setAllowUniversalAccessFromFileURLs(true);
+        // setAllowUniversalAccessFromFileURLs KALDIRILDI (güvenlik): APK modunda
+        // GAS trafiği AndroidBridge.pingGas üzerinden, SMS POST'u SmsReceiver'da
+        // (Java) — file:// sayfadan cross-origin XHR gerekmiyor.
         s.setCacheMode(WebSettings.LOAD_DEFAULT);
         s.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
